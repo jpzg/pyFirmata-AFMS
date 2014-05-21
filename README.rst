@@ -1,4 +1,9 @@
 =========
+BE AWARE - This is edited to provide SOME Adafruit MotorShield v2 functionality.
+=========
+The issue I wrote this to fix is jpzg/YunRobot#5
+
+=========
 pyFirmata
 =========
 
