@@ -33,6 +33,10 @@ SAMPLING_INTERVAL = 0x7A    # set the poll rate of the main loop
 SYSEX_NON_REALTIME = 0x7E   # MIDI Reserved for non-realtime messages
 SYSEX_REALTIME = 0x7F       # MIDI Reserved for realtime messages
 
+# User-defined commands (0x00-0x0F)
+AFMS_GET_SHIELD = 0x00
+AFMS_MOTOR_SPD = 0x01
+AFMS_MOTOR_DIR = 0x02
 
 # Pin modes.
 # except from UNAVAILABLE taken from Firmata.h
@@ -289,6 +293,10 @@ class Board(object):
         self.digital[pin]._mode = SERVO
         self.digital[pin].write(angle)
 
+    def get_shield(self,address = 0x60, frequency = 1600):
+        self.send_sysex(AFMS_GET_SHIELD,[address,to_two_bytes(frequency)]);
+        return AdafruitMotorShield(self,address,frequency)
+
     def exit(self):
         """Call this to exit cleanly."""
         # First detach all servo's, otherwise it somehow doesn't want to close...
@@ -499,3 +507,24 @@ class Pin(object):
                 msg += chr(value % 128)
                 msg += chr(value >> 7)
                 self.board.sp.write(msg)
+
+class AdafruitMotorShield:
+    def _init_(self,board,address,frequency):
+        self.address = address
+        self.frequency = frequency
+        self.board = board
+    
+    def getMotor(self,board,port):
+        return AdafruitMotorShield_DCMotor(self.board,self.address,port)
+
+class AdafruitMotorShield_DCMotor:
+    def _init_(self,board,address,port):
+        self.address = address
+        self.port = port
+        self.board = board
+
+    def run(self,direction):
+        board.send_sysex(AFMS_MOTOR_DIR,[direction])
+
+    def setSpeed(self,speed):
+        board.send_sysex(AFMS_MOTOR_SPD,[speed])
