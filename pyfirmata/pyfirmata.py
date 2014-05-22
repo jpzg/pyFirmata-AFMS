@@ -509,7 +509,7 @@ class Pin(object):
                 self.board.sp.write(msg)
 
 class AdafruitMotorShield:
-    def _init_(self,board,address,frequency):
+    def __init__(self,board,address,frequency):
         self.address = address
         self.frequency = frequency
         self.board = board
@@ -518,13 +518,13 @@ class AdafruitMotorShield:
         return AdafruitMotorShield_DCMotor(self.board,self.address,port)
 
 class AdafruitMotorShield_DCMotor:
-    def _init_(self,board,address,port):
+    def __init__(self,board,address,port):
         self.address = address
         self.port = port
         self.board = board
 
     def run(self,direction):
-        board.send_sysex(AFMS_MOTOR_DIR,[direction])
+        board.send_sysex(AFMS_MOTOR_DIR,[self.address,self.port,direction])
 
     def setSpeed(self,speed):
-        board.send_sysex(AFMS_MOTOR_SPD,[speed])
+        board.send_sysex(AFMS_MOTOR_SPD,[self.address,self.port,speed])
