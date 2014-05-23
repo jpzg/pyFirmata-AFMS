@@ -528,26 +528,24 @@ void sysexCallback(byte command, byte argc, byte *argv)
       Firmata.write(END_SYSEX);
       break;
     case AFMS_GET_SHIELD:
-      if(argc == 1){
-        byte addr = argv[0];
-        AFMS[addr - 0x60].begin();
-      }
+      Serial.println("YEA BITCH");
+      //byte addr = argv[0];
+      AFMS[argv[0] - 0x60].begin();
+      Serial.println("Shield gotten!");
       break;
     case AFMS_MOTOR_DIR:
-      if(argc == 3){
-        byte addr = argv[0];
-        byte port = argv[1];
-        byte dir = argv[2];
-        AFMS[addr - 0x60].getMotor(port)->run(dir);
-      }
+      //byte addr = argv[0];
+      //byte port = argv[1];
+      //byte dir = argv[2];
+      AFMS[argv[0] - 0x60].getMotor(argv[1])->run(argv[2]);
+      Serial.println("Motor direction changed!");
       break;
     case AFMS_MOTOR_SPD:
-      if(argc == 3){
-        byte addr = argv[0];
-        byte port = argv[1];
-        byte spd = argv[3];
-        AFMS[addr - 0x60].getMotor(port)->setSpeed(spd);
-      }
+      //byte addr = argv[0];
+      //byte port = argv[1];
+      //byte spd = argv[3];
+      AFMS[argv[0] - 0x60].getMotor(argv[1])->setSpeed(argv[2]);
+      Serial.println("Motor speed changed!");
       break;
   }
 }
@@ -625,6 +623,7 @@ void setup()
   // Just something to fix the wierd problem with wifi not starting if YunSerialTerminal isn't uploaded.
   // Also forwards console output to a connected computer.
   Serial.begin(115200);
+  Serial.println("hello world.");
   Serial1.begin(250000);
   while(true){
     if(Serial1.available()){
