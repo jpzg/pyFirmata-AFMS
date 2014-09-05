@@ -50,8 +50,8 @@
 
 // Defines for Adafruit Motor Shield custom commands (User reserved 0-15/0x00-0x0F)
 #define AFMS_GET_SHIELD   0x00
-#define AFMS_MOTOR_DIR    0x01
-#define AFMS_MOTOR_SPD    0x02
+#define AFMS_MOTOR_SPD    0x01
+#define AFMS_MOTOR_DIR    0x02
 // To be implemented:
 // defines for steppers (init, step, onestep, setspeed, release)
 
@@ -94,9 +94,7 @@ unsigned int i2cReadDelayTime = 0;  // default delay time between i2c read reque
 Servo servos[MAX_SERVOS];
 
 /* for Adafruit Motor Shield v2 */
-Adafruit_MotorShield AFMS[1] = {
-  Adafruit_MotorShield(0x60)
-};
+Adafruit_MotorShield AFMS = Adafruit_MotorShield(0x60);
 
 
 /*==============================================================================
@@ -527,24 +525,28 @@ void sysexCallback(byte command, byte argc, byte *argv)
       }
       Firmata.write(END_SYSEX);
       break;
+      /*
     case AFMS_GET_SHIELD:
       Serial.println("YEA BITCH");
       //byte addr = argv[0];
       AFMS[argv[0] - 0x60].begin();
       Serial.println("Shield gotten!");
       break;
+      */
     case AFMS_MOTOR_DIR:
       //byte addr = argv[0];
       //byte port = argv[1];
       //byte dir = argv[2];
-      AFMS[argv[0] - 0x60].getMotor(argv[1])->run(argv[2]);
+      //AFMS[argv[0] - 0x60].getMotor(argv[1])->run(argv[2]);
+      AFMS.getMotor(argv[1])->run(argv[2]);
       Serial.println("Motor direction changed!");
       break;
     case AFMS_MOTOR_SPD:
       //byte addr = argv[0];
       //byte port = argv[1];
       //byte spd = argv[3];
-      AFMS[argv[0] - 0x60].getMotor(argv[1])->setSpeed(argv[2]);
+      //AFMS[argv[0] - 0x60].getMotor(argv[1])->setSpeed(argv[2]);
+      AFMS.getMotor(argv[1])->setSpeed(argv[2]);
       Serial.println("Motor speed changed!");
       break;
   }
@@ -638,6 +640,8 @@ void setup()
   }
   Serial.write("No output to consume, wifi should now be online.\nConsole output will no longer be forwarded, starting Firmata");
   Serial1.end();
+  AFMS.begin();
+  Serial.println("Motor shield active");
   
   Firmata.setFirmwareVersion(FIRMATA_MAJOR_VERSION, FIRMATA_MINOR_VERSION);
 
