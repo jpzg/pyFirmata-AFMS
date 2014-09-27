@@ -514,7 +514,7 @@ class AdafruitMotorShield:
         self.frequency = frequency
         self.board = board
     
-    def getMotor(self,port):
+    def get_motor(self,port):
         return AdafruitMotorShield_DCMotor(self.board,self.address,port)
 
 class AdafruitMotorShield_DCMotor:
@@ -523,8 +523,8 @@ class AdafruitMotorShield_DCMotor:
         self.port = port
         self.board = board
 
-    def run(self,direction):
+    def dir(self,direction):
         self.board.send_sysex(AFMS_MOTOR_DIR,[self.address,self.port,direction])
 
-    def setSpeed(self,speed):
+    def speed(self,speed):
         self.board.send_sysex(AFMS_MOTOR_SPD,[self.address,self.port,speed])

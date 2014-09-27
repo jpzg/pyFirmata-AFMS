@@ -527,7 +527,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
       break;
       /*
     case AFMS_GET_SHIELD:
-      Serial.println("YEA BITCH");
+      Serial.println("AFMS_GET_SHIELD");
       //byte addr = argv[0];
       AFMS[argv[0] - 0x60].begin();
       Serial.println("Shield gotten!");
@@ -626,20 +626,18 @@ void setup()
   // Also forwards console output to a connected computer.
   Serial.begin(115200);
   Serial.println("hello world.");
+  
   Serial1.begin(250000);
-  while(true){
-    if(Serial1.available()){
-      Serial.write(Serial1.read());
-    }
-    if(!Serial1.available()){
-      delay(5000);
-      if(!Serial1.available()){
-        break;
-      }
-    }
+  Serial1.setTimeout(60000);
+  if(Serial1.find("- init -")){
+    Serial.println("Linino initializing, starting Firmata");
   }
-  Serial.write("No output to consume, wifi should now be online.\nConsole output will no longer be forwarded, starting Firmata");
+  else{
+    Serial.println("Timed out, linino may have already booted.\nContinuing anyway");
+  }
+  Serial1.setTimeout(1000);
   Serial1.end();
+  
   AFMS.begin();
   Serial.println("Motor shield active");
   
