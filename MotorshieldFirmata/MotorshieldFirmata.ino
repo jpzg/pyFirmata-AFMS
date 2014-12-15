@@ -626,7 +626,7 @@ void setup()
   // Also forwards console output to a connected computer.
   Serial.begin(115200);
   Serial.println("hello world.");
-  
+  /*
   Serial1.begin(250000);
   Serial1.setTimeout(60000);
   if(Serial1.find("- init -")){
@@ -637,7 +637,7 @@ void setup()
   }
   Serial1.setTimeout(1000);
   Serial1.end();
-  
+  */
   AFMS.begin();
   Serial.println("Motor shield active");
   
