@@ -1,7 +1,8 @@
-from pyfirmata import *
-from boards import BOARDS
+from .pyfirmata import *
+from .boards import BOARDS
 
-__version__ = '0.9.5'  # Don't forget to change in setup.py!
+__version__ = '1.0.3'  # Use bumpversion!
+
 
 # shortcut classes
 
@@ -15,7 +16,7 @@ class Arduino(Board):
         super(Arduino, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        return 'Arduino %s on %s' % (self.name, self.sp.port)
+        return "Arduino {0.name} on {0.sp.port}".format(self)
 
 
 class ArduinoMega(Board):
@@ -28,4 +29,17 @@ class ArduinoMega(Board):
         super(ArduinoMega, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        return 'Arduino Mega %s on %s' % (self.name, self.sp.port)
+        return "Arduino Mega {0.name} on {0.sp.port}".format(self)
+
+
+class ArduinoDue(Board):
+    """
+    A board that will set itself up as an Arduino Due.
+    """
+    def __init__(self, *args, **kwargs):
+        args = list(args)
+        args.append(BOARDS['arduino_due'])
+        super(ArduinoDue, self).__init__(*args, **kwargs)
+
+    def __str__(self):
+        return "Arduino Due {0.name} on {0.sp.port}".format(self)
